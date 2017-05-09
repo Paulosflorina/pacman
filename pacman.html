@@ -34,6 +34,8 @@
 
         this.speed = 150;
         this.threshold = 3;
+	this.score=0;
+        this.scoreText='';
 
         this.marker = new Phaser.Point();
         this.turnPoint = new Phaser.Point();
@@ -93,6 +95,7 @@
             this.map.createFromTiles(35, this.safetile, 'egg', this.layer, this.dots);
             //  Pacman should collide with everything except the safe tile
             this.map.setCollisionByExclusion([this.safetile], true, this.layer);
+	    this.scoreText = game.add.text(0, 500, 'Score: 0', { fontSize: '34px Arial', fill: 'green' });
 
             //  Position Pacman at grid location 14x17 (the +8 accounts for his anchor)
             this.pacman = this.add.sprite((14 * 16) + 8, (17 * 16) + 8, 'pacman', 0);
@@ -228,6 +231,8 @@
             dot.kill();
 	    var audio = new Audio('assets/Bite+1.wav'); 
             audio.play()
+	    this.score+=10;
+            this.scoreText.text= 'Score: ' + this.score;
 
             if (this.dots.total === 0)
             {
@@ -240,10 +245,8 @@
             egg.kill();
             var audio = new Audio('assets/Bite+1.wav'); 
             audio.play()
-	       /* if (this.eggs.total === 0)
-            {
-                this.eggs.callAll('revive');
-            }*/
+	    this.score+=10;//anebasma tou score
+            this.scoreText.text= 'Score: ' + this.score;
             
           
         },
