@@ -63,7 +63,7 @@
             //  Remove the next 2 lines if running locally
             this.load.baseURL = 'https://Paulosflorina.github.io/pacman/';
             this.load.crossOrigin = 'anonymous';
-
+            this.load.image('egg', 'assets/egg.png');
             this.load.image('dot', 'assets/dot.png');
             this.load.image('tiles', 'assets/pacman-tiles.png');
             this.load.spritesheet('pacman', 'assets/pacman.png', 32, 32);
@@ -87,7 +87,7 @@
             //  The dots will need to be offset by 6px to put them back in the middle of the grid
             this.dots.setAll('x', 6, false, false, 1);
             this.dots.setAll('y', 6, false, false, 1);
-
+            this.map.createFromTiles(35, this.safetile, 'egg', this.layer, this.dots);
             //  Pacman should collide with everything except the safe tile
             this.map.setCollisionByExclusion([this.safetile], true, this.layer);
 
@@ -230,11 +230,22 @@
             }
 
         },
+        
+         eatEgg: function(pacman,egg){
+            egg.kill();
+	        if (this.eggs.total === 0)
+            {
+                this.eggs.callAll('revive');
+            }
+            
+          
+        },
 
         update: function () {
           
             this.physics.arcade.collide(this.pacman, this.layer);
             this.physics.arcade.overlap(this.pacman, this.dots, this.eatDot, null, this);
+            this.physics.arcade.overlap(this.pacman, this.dots, this.eatEgg, null, this);
 
             this.marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
             this.marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
